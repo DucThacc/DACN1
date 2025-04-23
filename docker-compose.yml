@@ -1,0 +1,69 @@
+version: '3.8'
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./rules:/etc/prometheus/rules
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.enable-lifecycle'
+    ports:
+      - 9090:9090
+    networks:
+      - monitor
+    depends_on:
+      - node-exporter
+      - dvwa
+      - blackbox-exporter # Đảm bảo blackbox-exporter chạy trước
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    ports:
+      - 9100:9100
+    networks:
+      - monitor
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    volumes:
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    ports:
+      - 9093:9093
+    networks:
+      - monitor
+    depends_on:
+      - prometheus
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - 3000:3000
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    networks:
+      - monitor
+    depends_on:
+      - prometheus
+
+  dvwa:
+    image: vulnerables/web-dvwa
+    ports:
+      - 8080:80
+    networks:
+      - monitor
+    healthcheck: # Healthcheck cho DVWA
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  blackbox-exporter:
+    image: prom/blackbox-exporter:latest
+    ports:
+      - 9115:9115
+    networks:
+      - monitor
+
+networks:
+  monitor:

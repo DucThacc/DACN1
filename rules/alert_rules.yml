@@ -1,0 +1,20 @@
+groups:
+  - name: example_alert
+    rules:
+      - alert: HighCPUUsage
+        expr: rate(node_cpu_seconds_total{mode="user"}[1m]) > 0.5
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage detected"
+          description: "User mode CPU usage is above 50% for 30s on instance {{ $labels.instance }}"
+
+      - alert: DVWANotResponding
+        expr: probe_success{job="blackbox_dvwa"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "DVWA không phản hồi HTTP thành công"
+          description: "DVWA tại {{ $labels.instance }} không phản hồi (HTTP lỗi) trong 30 giây."
