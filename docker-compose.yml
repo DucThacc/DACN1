@@ -15,7 +15,7 @@ services:
     depends_on:
       - node-exporter
       - dvwa
-      - blackbox-exporter # Đảm bảo blackbox-exporter chạy trước
+      - blackbox-exporter
 
   node-exporter:
     image: prom/node-exporter:latest
@@ -52,7 +52,7 @@ services:
       - 8080:80
     networks:
       - monitor
-    healthcheck: # Healthcheck cho DVWA
+    healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost"]
       interval: 30s
       timeout: 10s
@@ -65,5 +65,14 @@ services:
     networks:
       - monitor
 
+  monitor-bot:
+    build:
+      context: ./monitor-bot  # Đường dẫn tới thư mục chứa Dockerfile và monitor_bot.py
+    networks:
+      - monitor
+    restart: always
+    volumes:
+      - ./monitor-bot/monitor_bot.py:/app/monitor_bot.py  # Mount trực tiếp file monitor_bot.py vào container
 networks:
   monitor:
+
