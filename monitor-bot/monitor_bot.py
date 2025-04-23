@@ -6,6 +6,8 @@ from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 # 🔐 Cấu hình token & chat_id ở đây (có thể để trống CHAT_ID)
 TELEGRAM_BOT_TOKEN = '7920437249:AAFHucmnlKgeqkd-n19xFoM8aiBP-oR-NYg'
 PROMETHEUS_URL = 'http://prometheus:9090'  # Sử dụng tên service trong Docker network
+ALERTMANAGER_URL = "http://alertmanager:9093" # sử dụng tên service docker
+
 
 logging.basicConfig(level=logging.INFO)
 
@@ -46,8 +48,70 @@ async def check(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     await context.bot.send_message(chat_id=update.effective_chat.id, text=report, parse_mode="Markdown")
 
+#/alerts Kiểm tra lịch sử alert gần nhất từ Prometheus Alertmanager
+async def alerts(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    try:
+        resp = requests.get(f"{ALERTMANAGER_URL}/api/v2/alerts", timeout=10)
+        resp.raise_for_status()
+        data = resp.json()
+        if not data:
+            await update.message.reply_text("✅ Không có cảnh báo nào hiện tại.")
+            return
+        messages = []
+        for alert in data:
+            status = alert.get("status", {}).get("state", "unknown")
+            name = alert.get("labels", {}).get("alertname", "unknown")
+            starts_at = alert.get("startsAt", "N/A")
+            messages.append(f"⚠️ {name} - {status.upper()} (since {starts_at})")
+        await update.message.reply_text("\n".join(messages))
+    except Exception as e:
+        await update.message.reply_text(f"Lỗi lấy cảnh báo: {e}")
+
+
+#/uptime – Kiểm tra thời gian uptime của DVWA (hoặc bất kỳ container nào)
+async def uptime(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    try:
+        result = await get_metric("time() - node_boot_time_seconds")
+        uptime_seconds = float(result)
+        uptime_hours = uptime_seconds / 3600
+        await update.message.reply_text(f"🕒 Máy chủ đã khởi động lại cách đây {uptime_hours:.2f} giờ.")
+    except Exception as e:
+        await update.message.reply_text(f"Lỗi: {e}")
+
+
+#/status – Kiểm tra container DVWA có đang chạy không (ping từ Blackbox Exporter)
+probe_query = 'probe_success{instance="http://dvwa:80"}'
+
+async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    try:
+        status = await get_metric(probe_query)
+        if status == "1":
+            await update.message.reply_text("✅ DVWA hiện đang hoạt động bình thường.")
+        else:
+            await update.message.reply_text("❌ DVWA hiện đang _ngưng hoạt động_.")
+    except Exception as e:
+        await update.message.reply_text(f"Lỗi kiểm tra trạng thái DVWA: {e}")
+
+
+#/help – Gợi ý các lệnh có thể dùng
+async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    help_text = (
+        "🤖 *Các lệnh hỗ trợ:*\n"
+        "/check - Báo cáo hệ thống\n"
+        "/alerts - Xem cảnh báo hiện tại\n"
+        "/uptime - Kiểm tra thời gian uptime của server\n"
+        "/status - Kiểm tra DVWA có hoạt động không\n"
+        "/help - Danh sách các lệnh"
+    )
+    await update.message.reply_text(help_text, parse_mode="Markdown")
+
 if __name__ == '__main__':
     app = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
     app.add_handler(CommandHandler("check", check))
-    app.run_polling()
 
+    app.add_handler(CommandHandler("alerts", alerts))
+    app.add_handler(CommandHandler("uptime", uptime))
+    app.add_handler(CommandHandler("status", status))
+    app.add_handler(CommandHandler("help", help_command))
+
+    app.run_polling()
