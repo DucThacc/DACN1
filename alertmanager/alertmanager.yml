@@ -1,10 +1,29 @@
 global:
   resolve_timeout: 1m
+
 route:
-  receiver: 'telegram'
+  group_wait: 10s
+  group_interval: 30s
+  repeat_interval: 1h
+  receiver: 'default'  # fallback nếu không match
+  routes:
+    - match:
+        severity: critical
+      receiver: 'telegram-critical'
+
 receivers:
-  - name: 'telegram'
+  - name: 'telegram-critical'
     telegram_configs:
       - bot_token: "7920437249:AAFHucmnlKgeqkd-n19xFoM8aiBP-oR-NYg"
         chat_id: 6793955595
-        message: '{{ .CommonAnnotations.summary }}'
+        parse_mode: "Markdown"
+        message: |
+          🚨 *CẢNH BÁO NGHIÊM TRỌNG!*
+          *{{ .CommonLabels.alertname }}*
+          {{ .CommonAnnotations.description }}
+
+  - name: 'default'
+    telegram_configs:
+      - bot_token: "7920437249:AAFHucmnlKgeqkd-n19xFoM8aiBP-oR-NYg"
+        chat_id: 6793955595
+        message: "🔔 Cảnh báo không phân loại: {{ .CommonAnnotations.summary }}"

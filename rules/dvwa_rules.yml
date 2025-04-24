@@ -1,0 +1,12 @@
+groups:
+  - name: dvwa-alerts
+    rules:
+      - alert: DVWADoSAttackSuspected
+        expr: rate(probe_duration_seconds{instance="http://dvwa:80"}[1m]) > 0.1
+#         expr: vector(1)
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "❗ Khả năng tấn công DoS HTTP vào DVWA"
+          description: "Thời gian phản hồi DVWA tăng bất thường trên 1s trong 30s gần nhất. Có thể đang bị tấn công từ IP lạ."
