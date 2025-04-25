@@ -3,10 +3,19 @@ groups:
     rules:
       - alert: DVWADoSAttackSuspected
         expr: rate(probe_duration_seconds{instance="http://dvwa:80"}[1m]) > 0.1
-#         expr: vector(1)
         for: 30s
         labels:
           severity: critical
         annotations:
           summary: "❗ Khả năng tấn công DoS HTTP vào DVWA"
-          description: "Thời gian phản hồi DVWA tăng bất thường trên 1s trong 30s gần nhất. Có thể đang bị tấn công từ IP lạ."
+          description: "Thời gian phản hồi DVWA tăng bất thường trên 0.1s trong 30s gần nhất. Có thể đang bị tấn công từ IP lạ."
+
+      - alert: SQLMapAttackDetected
+        expr: count_over_time({job="apache_access", __line__=~".*sqlmap.*"}[1m]) > 0
+        for: 10s
+        labels:
+          severity: critical
+        annotations:
+          summary: "🚨 Phát hiện SQLMap đang tấn công!"
+          description: "Log Apache chứa chuỗi 'sqlmap', cho thấy có thể đang bị quét SQL Injection. Kiểm tra log để xác định IP."
+

@@ -52,6 +52,8 @@ services:
       - 8080:80
     networks:
       - monitor
+    volumes:
+      - ./dvwa_logs:/var/log/apache2  # mount logs ra host
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost"]
       interval: 30s
@@ -73,6 +75,26 @@ services:
     restart: always
     volumes:
       - ./monitor-bot/monitor_bot.py:/app/monitor_bot.py  # Mount trực tiếp file monitor_bot.py vào container
+
+
+  loki:
+    image: grafana/loki:2.9.2
+    ports:
+      - 3100:3100
+    networks:
+      - monitor
+
+  promtail:
+    image: grafana/promtail:2.9.2
+    volumes:
+      - ./dvwa_logs:/var/log/apache2
+      - ./promtail/promtail-config.yml:/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - monitor
+    depends_on:
+      - loki
+
 networks:
   monitor:
 

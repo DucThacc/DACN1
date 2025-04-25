@@ -7,6 +7,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 TELEGRAM_BOT_TOKEN = '7920437249:AAFHucmnlKgeqkd-n19xFoM8aiBP-oR-NYg'
 PROMETHEUS_URL = 'http://prometheus:9090'  # Sử dụng tên service trong Docker network
 ALERTMANAGER_URL = "http://alertmanager:9093" # sử dụng tên service docker
+LOKI_URL = "http://loki:3100"  # Dùng đúng địa chỉ Loki trong docker network
 
 
 logging.basicConfig(level=logging.INFO)
@@ -105,6 +106,50 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     await update.message.reply_text(help_text, parse_mode="Markdown")
 
+
+#sqlmap attack
+async def sqlmap_check(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    try:
+        now = datetime.datetime.utcnow()
+        # ISO timestamp cho log gần nhất (1 phút trước)
+        start = (now - datetime.timedelta(minutes=1)).isoformat("T") + "Z"
+        end = now.isoformat("T") + "Z"
+
+        # LogQL query tìm các dòng có "sqlmap"
+        query = '{job="apache_access"} |= "sqlmap"'
+        params = {
+            "query": query,
+            "start": start,
+            "end": end,
+            "limit": 5
+        }
+
+        # Gửi request đến Loki
+        resp = requests.get(f"{LOKI_URL}/loki/api/v1/query_range", params=params)
+        data = resp.json()
+
+        if not data["data"]["result"]:
+            await update.message.reply_text("✅ Không phát hiện truy cập nghi ngờ từ sqlmap trong 1 phút qua.")
+            return
+
+        # Trích xuất IP từ dòng log (ví dụ IP đứng đầu)
+        log_lines = data["data"]["result"][0]["values"]
+        detected_ips = set()
+
+        for _, line in log_lines:
+            # Giả sử IP là chuỗi đầu tiên trước dấu cách
+            ip = line.split(" ")[0]
+            detected_ips.add(ip)
+
+        ip_list = "\n".join(detected_ips)
+        await update.message.reply_text(
+            f"🚨 *Phát hiện tấn công SQLMap!*\nCác IP nghi ngờ:\n`{ip_list}`",
+            parse_mode="Markdown"
+        )
+
+    except Exception as e:
+        await update.message.reply_text(f"Lỗi kiểm tra sqlmap: {e}")
+
 if __name__ == '__main__':
     app = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
     app.add_handler(CommandHandler("check", check))
@@ -113,5 +158,6 @@ if __name__ == '__main__':
     app.add_handler(CommandHandler("uptime", uptime))
     app.add_handler(CommandHandler("status", status))
     app.add_handler(CommandHandler("help", help_command))
+    app.add_handler(CommandHandler("sqlmap", sqlmap_check))
 
     app.run_polling()
