@@ -3,7 +3,7 @@ groups:
     rules:
       - alert: DVWADoSAttackSuspected
         expr: rate(probe_duration_seconds{instance="http://dvwa:80"}[1m]) > 0.1
-        for: 30s
+        for: 0s
         labels:
           severity: critical
         annotations:
@@ -11,8 +11,9 @@ groups:
           description: "Thời gian phản hồi DVWA tăng bất thường trên 0.1s trong 30s gần nhất. Có thể đang bị tấn công từ IP lạ."
 
       - alert: SQLMapAttackDetected
+#        expr: count_over_time({job="apache_access", __line__=~".*sqlmap.*"}[1m]) > 0
         expr: count_over_time({job="apache_access", __line__=~".*sqlmap.*"}[1m]) > 0
-        for: 10s
+        for: 0s
         labels:
           severity: critical
         annotations:

@@ -8,3 +8,37 @@
 [Fri Apr 25 10:43:40.343142 2025] [core:notice] [pid 277] AH00094: Command line: '/usr/sbin/apache2'
 [Fri Apr 25 10:46:02.518980 2025] [mpm_prefork:notice] [pid 281] AH00163: Apache/2.4.25 (Debian) configured -- resuming normal operations
 [Fri Apr 25 10:46:02.519033 2025] [core:notice] [pid 281] AH00094: Command line: '/usr/sbin/apache2'
+[Sat Apr 26 08:19:08.456248 2025] [core:warn] [pid 292] AH00098: pid file /var/run/apache2/apache2.pid overwritten -- Unclean shutdown of previous Apache run?
+[Sat Apr 26 08:19:08.462011 2025] [mpm_prefork:notice] [pid 292] AH00163: Apache/2.4.25 (Debian) configured -- resuming normal operations
+[Sat Apr 26 08:19:08.462115 2025] [core:notice] [pid 292] AH00094: Command line: '/usr/sbin/apache2'
+[Sat Apr 26 08:20:38.895629 2025] [:error] [pid 315] [client 192.168.178.1:59573] PHP Notice:  Constant DVWA_WEB_PAGE_TO_ROOT already defined in /var/www/html/dvwa/includes/DBMS/MySQL.php on line 9, referer: http://192.168.178.152:8080/setup.php
+[Sat Apr 26 08:26:09.335203 2025] [:error] [pid 392] [client 192.168.178.133:49632] PHP Warning:  mysqli_query(): (22003/1690): BIGINT value is out of range in '(2 * if((select #\x03),8446744073709551610,8446744073709551610))' in /var/www/html/vulnerabilities/sqli/source/low.php on line 9, referer: http://192.168.178.152:8080/vulnerabilities/sqli/
+[Sat Apr 26 08:26:09.344347 2025] [:error] [pid 312] [client 192.168.178.133:49650] PHP Warning:  mysqli_query(): (22003/1690): DOUBLE value is out of range in 'exp(~((select #\x02)))' in /var/www/html/vulnerabilities/sqli/source/low.php on line 9, referer: http://192.168.178.152:8080/vulnerabilities/sqli/
+[Sat Apr 26 08:59:55.263209 2025] [mpm_prefork:notice] [pid 273] AH00163: Apache/2.4.25 (Debian) configured -- resuming normal operations
+[Sat Apr 26 08:59:55.263270 2025] [core:notice] [pid 273] AH00094: Command line: '/usr/sbin/apache2'
+[Sat Apr 26 09:01:40.342778 2025] [mpm_prefork:notice] [pid 278] AH00163: Apache/2.4.25 (Debian) configured -- resuming normal operations
+[Sat Apr 26 09:01:40.342848 2025] [core:notice] [pid 278] AH00094: Command line: '/usr/sbin/apache2'
+[Sat Apr 26 09:04:47.308477 2025] [:error] [pid 298] [client 192.168.178.133:60814] PHP Notice:  Constant DVWA_WEB_PAGE_TO_ROOT already defined in /var/www/html/dvwa/includes/DBMS/MySQL.php on line 9, referer: http://192.168.178.152:8080/setup.php
+[Sat Apr 26 09:11:49.945078 2025] [mpm_prefork:notice] [pid 283] AH00163: Apache/2.4.25 (Debian) configured -- resuming normal operations
+[Sat Apr 26 09:11:49.945136 2025] [core:notice] [pid 283] AH00094: Command line: '/usr/sbin/apache2'
+[Sat Apr 26 09:12:46.692534 2025] [:error] [pid 296] [client 192.168.178.133:57338] PHP Notice:  Constant DVWA_WEB_PAGE_TO_ROOT already defined in /var/www/html/dvwa/includes/DBMS/MySQL.php on line 9, referer: http://192.168.178.152:8080/setup.php
+[Sat Apr 26 09:26:12.602845 2025] [mpm_prefork:notice] [pid 276] AH00163: Apache/2.4.25 (Debian) configured -- resuming normal operations
+[Sat Apr 26 09:26:12.602899 2025] [core:notice] [pid 276] AH00094: Command line: '/usr/sbin/apache2'
+[Sat Apr 26 09:26:55.809581 2025] [:error] [pid 288] [client 192.168.178.133:40794] PHP Notice:  Constant DVWA_WEB_PAGE_TO_ROOT already defined in /var/www/html/dvwa/includes/DBMS/MySQL.php on line 9, referer: http://192.168.178.152:8080/setup.php
+[Sat Apr 26 09:31:13.721120 2025] [mpm_prefork:notice] [pid 291] AH00163: Apache/2.4.25 (Debian) configured -- resuming normal operations
+[Sat Apr 26 09:31:13.721173 2025] [core:notice] [pid 291] AH00094: Command line: '/usr/sbin/apache2'
+[Sat Apr 26 09:32:40.955570 2025] [mpm_prefork:notice] [pid 277] AH00163: Apache/2.4.25 (Debian) configured -- resuming normal operations
+[Sat Apr 26 09:32:40.955642 2025] [core:notice] [pid 277] AH00094: Command line: '/usr/sbin/apache2'
+[Sat Apr 26 09:33:34.060004 2025] [mpm_prefork:notice] [pid 294] AH00163: Apache/2.4.25 (Debian) configured -- resuming normal operations
+[Sat Apr 26 09:33:34.060065 2025] [core:notice] [pid 294] AH00094: Command line: '/usr/sbin/apache2'
+[Sat Apr 26 09:34:52.691312 2025] [mpm_prefork:notice] [pid 280] AH00163: Apache/2.4.25 (Debian) configured -- resuming normal operations
+[Sat Apr 26 09:34:52.691375 2025] [core:notice] [pid 280] AH00094: Command line: '/usr/sbin/apache2'
+[Sat Apr 26 09:35:45.617711 2025] [mpm_prefork:notice] [pid 294] AH00163: Apache/2.4.25 (Debian) configured -- resuming normal operations
+[Sat Apr 26 09:35:45.617783 2025] [core:notice] [pid 294] AH00094: Command line: '/usr/sbin/apache2'
+[Sat Apr 26 09:40:26.137917 2025] [mpm_prefork:notice] [pid 286] AH00163: Apache/2.4.25 (Debian) configured -- resuming normal operations
+[Sat Apr 26 09:40:26.138432 2025] [core:notice] [pid 286] AH00094: Command line: '/usr/sbin/apache2'
+[Sat Apr 26 09:42:23.873534 2025] [mpm_prefork:notice] [pid 278] AH00163: Apache/2.4.25 (Debian) configured -- resuming normal operations
+[Sat Apr 26 09:42:23.873595 2025] [core:notice] [pid 278] AH00094: Command line: '/usr/sbin/apache2'
+[Sat Apr 26 09:42:46.850040 2025] [:error] [pid 288] [client 192.168.178.133:38358] PHP Notice:  Constant DVWA_WEB_PAGE_TO_ROOT already defined in /var/www/html/dvwa/includes/DBMS/MySQL.php on line 9, referer: http://192.168.178.152:8080/setup.php
+[Sat Apr 26 09:46:14.754565 2025] [:error] [pid 290] [client 192.168.178.133:39216] script '/var/www/html/vulnerabilities/search.php' not found or unable to stat
+[Sat Apr 26 09:46:26.095542 2025] [:error] [pid 291] [client 192.168.178.133:41378] script '/var/www/html/vulnerabilities/sqli/search.php' not found or unable to stat
