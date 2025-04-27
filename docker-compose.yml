@@ -41,10 +41,15 @@ services:
       - 3000:3000
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=false
+      - GF_AUTH_ADMIN_USER=admin
+      - GF_AUTH_ADMIN_PASSWORD=admin
     networks:
       - monitor
     depends_on:
       - prometheus
+      - loki
 
   dvwa:
     image: vulnerables/web-dvwa

@@ -42,3 +42,8 @@
 [Sat Apr 26 09:42:46.850040 2025] [:error] [pid 288] [client 192.168.178.133:38358] PHP Notice:  Constant DVWA_WEB_PAGE_TO_ROOT already defined in /var/www/html/dvwa/includes/DBMS/MySQL.php on line 9, referer: http://192.168.178.152:8080/setup.php
 [Sat Apr 26 09:46:14.754565 2025] [:error] [pid 290] [client 192.168.178.133:39216] script '/var/www/html/vulnerabilities/search.php' not found or unable to stat
 [Sat Apr 26 09:46:26.095542 2025] [:error] [pid 291] [client 192.168.178.133:41378] script '/var/www/html/vulnerabilities/sqli/search.php' not found or unable to stat
+[Sun Apr 27 15:34:52.062077 2025] [core:warn] [pid 286] AH00098: pid file /var/run/apache2/apache2.pid overwritten -- Unclean shutdown of previous Apache run?
+[Sun Apr 27 15:34:52.069393 2025] [mpm_prefork:notice] [pid 286] AH00163: Apache/2.4.25 (Debian) configured -- resuming normal operations
+[Sun Apr 27 15:34:52.082869 2025] [core:notice] [pid 286] AH00094: Command line: '/usr/sbin/apache2'
+[Sun Apr 27 15:47:33.381293 2025] [mpm_prefork:notice] [pid 274] AH00163: Apache/2.4.25 (Debian) configured -- resuming normal operations
+[Sun Apr 27 15:47:33.381377 2025] [core:notice] [pid 274] AH00094: Command line: '/usr/sbin/apache2'

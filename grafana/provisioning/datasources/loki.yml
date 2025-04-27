@@ -1,0 +1,6 @@
+apiVersion: 1
+datasources:
+  - name: Loki
+    type: loki
+    url: http://loki:3100      # Đảm bảo hostname 'loki' có thể phân giải đến container Loki của bạn
+    access: proxy
