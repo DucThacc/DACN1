@@ -3,11 +3,10 @@ import requests
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-# 🔐 Cấu hình token & chat_id ở đây (có thể để trống CHAT_ID)
 TELEGRAM_BOT_TOKEN = '7920437249:AAFHucmnlKgeqkd-n19xFoM8aiBP-oR-NYg'
-PROMETHEUS_URL = 'http://prometheus:9090'  # Sử dụng tên service trong Docker network
-ALERTMANAGER_URL = "http://alertmanager:9093" # sử dụng tên service docker
-LOKI_URL = "http://loki:3100"  # Dùng đúng địa chỉ Loki trong docker network
+PROMETHEUS_URL = 'http://prometheus:9090' 
+ALERTMANAGER_URL = "http://alertmanager:9093" 
+LOKI_URL = "http://loki:3100"  
 
 
 logging.basicConfig(level=logging.INFO)
